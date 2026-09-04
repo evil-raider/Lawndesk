@@ -135,23 +135,6 @@ open class LawnchairLauncher : NexusLauncherActivity(),
         }
     }
 
-    override fun onNewIntent(intent: Intent) {
-        val handleHome = Intent.ACTION_MAIN == intent.action
-        super.onNewIntent(intent)
-        // Lawndesk: when Home is pressed, snap to the user-configured home page instead of
-        // the first page. Posted after super so it overrides the default moveToDefaultScreen().
-        if (handleHome) {
-            workspace.post {
-                if (isInState(LauncherState.NORMAL) && !workspace.isTouchActive) {
-                    val page = getConfiguredDefaultWorkspacePage()
-                    if (page in 0 until workspace.childCount && workspace.nextPage != page) {
-                        workspace.snapToPage(page)
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * Lawndesk: resolves the workspace page index configured as the home page. The preference
      * stores the screen id (as a string); if it is missing or no longer exists we fall back to
