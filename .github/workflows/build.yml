@@ -1,0 +1,48 @@
+name: Build debug APK
+
+on:
+  push:
+    branches: [feature/custom-default-page, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Recent Android command-line tools require JDK 11+ to run, so use JDK 17
+      # just for installing SDK packages.
+      - name: Set up JDK 17 (for sdkmanager)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install SDK platform 28 + build-tools 28.0.3
+        run: sdkmanager "platforms;android-28" "build-tools;28.0.3"
+
+      # Lawnchair V1 toolchain (Gradle 5.5.1 / AGP 3.4.2) must build on JDK 8.
+      # This step runs last so JAVA_HOME points at JDK 8 for the Gradle build.
+      - name: Set up JDK 8 (for Gradle build)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Build quickstepLawnchair debug APK
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleQuickstepLawnchairDebug --stacktrace --no-daemon
+
+      - name: Upload APK artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lawndesk-debug-apk
+          path: build/outputs/apk/**/*.apk
+          if-no-files-found: warn
