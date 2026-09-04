@@ -74,6 +74,7 @@ open class LawnchairLauncher : NexusLauncherActivity(),
     protected open val isScreenshotMode = false
     private val prefCallback = LawnchairPreferencesChangeCallback(this)
     private var paused = false
+    private var applyDefaultPageOnBind = false
 
     private val customLayoutInflater by lazy {
         LawnchairLayoutInflater(super.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater, this)
@@ -89,6 +90,10 @@ open class LawnchairLauncher : NexusLauncherActivity(),
 //        IconPackManager.getInstance(this).defaultPack.dynamicClockDrawer
 
         super.onCreate(savedInstanceState)
+
+        // Lawndesk: only apply the configured home page on a fresh launch, never on a
+        // configuration-change restore (e.g. rotation) or in screenshot mode.
+        applyDefaultPageOnBind = savedInstanceState == null && !isScreenshotMode
 
         hookGoogleSansDialogTitle()
 
@@ -120,6 +125,43 @@ open class LawnchairLauncher : NexusLauncherActivity(),
     override fun finishBindingItems(currentScreen: Int) {
         super.finishBindingItems(currentScreen)
         Utilities.onLauncherStart()
+        // Lawndesk: open on the user-configured home page when the launcher is first bound.
+        if (applyDefaultPageOnBind) {
+            applyDefaultPageOnBind = false
+            val page = getConfiguredDefaultWorkspacePage()
+            if (page in 0 until workspace.childCount) {
+                workspace.currentPage = page
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        val handleHome = Intent.ACTION_MAIN == intent.action
+        super.onNewIntent(intent)
+        // Lawndesk: when Home is pressed, snap to the user-configured home page instead of
+        // the first page. Posted after super so it overrides the default moveToDefaultScreen().
+        if (handleHome) {
+            workspace.post {
+                if (isInState(LauncherState.NORMAL) && !workspace.isTouchActive) {
+                    val page = getConfiguredDefaultWorkspacePage()
+                    if (page in 0 until workspace.childCount && workspace.nextPage != page) {
+                        workspace.snapToPage(page)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Lawndesk: resolves the workspace page index configured as the home page. The preference
+     * stores the screen id (as a string); if it is missing or no longer exists we fall back to
+     * the first page.
+     */
+    private fun getConfiguredDefaultWorkspacePage(): Int {
+        val raw = Utilities.getPrefs(this).getString(PREF_DEFAULT_HOME_SCREEN, "0") ?: "0"
+        val screenId = raw.toLongOrNull() ?: return 0
+        val index = workspace.getPageIndexForScreenId(screenId)
+        return if (index in 0 until workspace.childCount) index else 0
     }
 
     override fun onRestart() {
@@ -389,6 +431,9 @@ open class LawnchairLauncher : NexusLauncherActivity(),
         const val REQUEST_PERMISSION_LOCATION_ACCESS = 667
         const val REQUEST_PERMISSION_MODIFY_NAVBAR = 668
         const val CODE_EDIT_ICON = 100
+
+        // Lawndesk: SharedPreferences key holding the chosen home page screen id (as a string).
+        const val PREF_DEFAULT_HOME_SCREEN = "pref_defaultHomeScreen"
 
         var sRestart = false
         var sRecreate = false

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lawndesk: choose which workspace page is the home page -->
+    <string name="home_screen_title">Home screen page</string>
+    <string name="home_screen_page_format">Page %1$d</string>
+</resources>

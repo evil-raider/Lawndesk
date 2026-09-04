@@ -10,6 +10,13 @@
             android:key="pref_desktop_grid_size"
             android:title="@string/grid_size" />
 
+        <ch.deletescape.lawnchair.preferences.HomeScreenPreference
+            android:key="pref_defaultHomeScreen"
+            android:title="@string/home_screen_title"
+            android:defaultValue="0"
+            android:persistent="true"
+            android:summary="%s" />
+
         <ch.deletescape.lawnchair.preferences.StyledSwitchPreferenceCompat
             android:defaultValue="false"
             android:key="pref_allowOverlap"
