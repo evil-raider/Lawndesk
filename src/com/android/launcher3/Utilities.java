@@ -1073,10 +1073,14 @@ public final class Utilities {
                 android.Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED;
     }
 
+    // Lawndesk: master switch for debug notifications. Kept off so debug builds don't spam the
+    // notification shade with model-update messages (e.g. PackageUpdatedTask). Flip to true only
+    // when actively debugging.
+    private static final boolean DEBUG_NOTIFICATIONS = false;
     static int sDebugNotificationId = 1;
     public static void debugNotification(String msg) {
         Log.d(TAG, msg);
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG && DEBUG_NOTIFICATIONS) {
             try {
                 Context context = LauncherAppState.getInstanceNoCreate().getContext();
                 NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
