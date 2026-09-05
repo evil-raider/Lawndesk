@@ -2,7 +2,7 @@
 
 🇬🇧 [English version](#lawndesk-1)
 
-Lawndesk — форк [Lawnchair](https://github.com/LawnchairLauncher/Lawnchair): Android-лаунчер без app drawer.
+Этот проект — форк [Lawndesk](https://github.com/renzhn/Lawndesk), который, в свою очередь, является форком [Lawnchair](https://github.com/LawnchairLauncher/Lawnchair). Это Android-лаунчер без app drawer.
 
 ## Предыстория
 
@@ -29,7 +29,7 @@ Lawndesk распространяется под лицензией [GPLv3](http
 
 # Lawndesk
 
-Lawndesk is a fork of [Lawnchair](https://github.com/LawnchairLauncher/Lawnchair): an Android launcher without an app drawer.
+This project is a fork of [Lawndesk](https://github.com/renzhn/Lawndesk), which is itself a fork of [Lawnchair](https://github.com/LawnchairLauncher/Lawnchair). It is an Android launcher without an app drawer.
 
 ## Background
 
