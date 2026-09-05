@@ -1,5 +1,7 @@
 # Lawndesk
 
+🇬🇧 [English version](#lawndesk-1)
+
 Lawndesk — форк [Lawnchair](https://github.com/LawnchairLauncher/Lawnchair): Android-лаунчер без app drawer.
 
 ## Предыстория
