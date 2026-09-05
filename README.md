@@ -1,75 +1,51 @@
 # Lawndesk
 
-[русский](#русский) | [English](#english)
+Lawndesk — форк [Lawnchair](https://github.com/LawnchairLauncher/Lawnchair): Android-лаунчер без app drawer.
 
----
+## Предыстория
 
-## русский
+Эта ветка появилась из-за нескольких конкретных проблем, всплывших в повседневном использовании:
 
-Lawndesk — Android-лаунчер без app drawer, сделанный на базе [Lawnchair Launcher](https://github.com/LawnchairLauncher/Lawnchair).
+- **Нельзя было выбрать, какая страница рабочего стола — «домашняя».** Лаунчер всегда открывался на странице 0, и нажатие Home всегда возвращало туда же. Закрепить другую страницу как настоящий домашний экран было нельзя.
+- **Нельзя было расширить рабочий стол влево.** Стоковый Launcher3 умеет добавлять новую страницу только с правого края — перетаскиванием иконки за последнюю страницу. Аналогичного действия для левого края не существовало.
 
-### Предыстория
+## Текущее состояние
 
-Эта ветка появилась из-за нескольких конкретных проблем, вскрывшихся в повседневном использовании:
+### Настраиваемая домашняя страница
+В настройках рабочего стола появился пункт **Home screen** со списком текущих страниц рабочего стола. Выбор сохраняется по стабильному screen id страницы, а не по её позиции, поэтому переживает изменение порядка страниц. Он применяется при холодном старте лаунчера — но не при восстановлении после поворота экрана либо смены конфигурации и не в режиме скриншота — и при каждом нажатии Home: переход выполняется сразу одним скроллом на выбранную страницу, а не через страницу 0. Если сохранённая страница больше не существует (например, была удалена), лаунчер откатывается на первую страницу вместо падения.
 
-- **Нельзя было выбрать, какая страница рабочего стола — «домашняя».** Лаунчер всегда открывался на странице 0, и нажатие Home всегда возвращало туда же — закрепить другую страницу как настоящий домашний экран было нельзя.
-- **Нельзя было расширить рабочий стол влево.** Стоковый Launcher3 умеет добавлять новую страницу только с правого края (перетаскиванием иконки за последнюю страницу). Аналогичного действия для левого края не существовало.
+### Добавление страницы слева
+Долгое нажатие на пустом месте рабочего стола теперь предлагает пункт **Add page to left** рядом с «Обои», «Виджеты» и «Настройки». Он доступен только при разблокированном рабочем столе — так же, как «Виджеты». Пункт вставляет новую пустую страницу в самое левое положение рабочего стола и сразу переключает на неё. Новая страница живёт по обычному жизненному циклу: остаётся, если на неё что-то добавили, и автоматически убирается, если осталась пустой, — как любая другая неиспользуемая страница.
 
-### текущее состояние
+## Лицензия
+Lawndesk распространяется под лицензией [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
-#### Настраиваемая домашняя страница
-в настройках рабочего стола появился выбор страницы («Домашний экран») со списком текущих страниц рабочего стола. выбор сохраняется по стабильному screen id страницы, а не по её позиции, поэтому переживает изменение порядка страниц. апплицируется:
-- при холодном старте лаунчера (не при восстановлении после поворота экрана/смены конфигурации и не в режиме скриншота), и
-- при каждом нажатии Home — сразу одним скроллом переходит на выбранную страницу, вместо того чтобы сначала прыгать на страницу 0.
-
-если сохранённая страница больше не существует (например, была удалена), лаунчер откатывается на первую страницу вместо падения.
-
-#### Добавление страницы слева
-долгое нажатие на пустом месте рабочего стола теперь предлагает пункт «Add page to left» рядом с Wallpaper/Widgets/Settings, скрытый за той же настройкой «lock desktop», что и Widgets. он вставляет новую пустую страницу в самое левое положение рабочего стола и переключает на неё. новая пустая страница живёт по обычному жизненному циклу страницы: остаётся, если на неё что-то бросили, и автоматически убирается, если осталась пустой — как и любая другая неиспользуемая страница.
-
-#### Release-сборка и подпись
-проект теперь собирается и распространяется как подписанная **release**-сборка:
-- подпись релиза настроена через `build.gradle`, ключ и пароли берутся из переменных окружения, а не хранятся в исходниках.
-- CI собирает подписанный release APK как артефакт сборки.
-
-### Лицензия
-Lawndesk распространяется под лицензией [*GPLv3*](https://www.gnu.org/licenses/gpl-3.0.en.html).
-
-### Благодарности
+## Благодарности
 [Lawnchair Launcher](https://github.com/LawnchairLauncher/Lawnchair)
 
 ---
 
-## English
+# Lawndesk
 
-Lawndesk is an Android launcher without app drawer, based on [Lawnchair Launcher](https://github.com/LawnchairLauncher/Lawnchair).
+Lawndesk is a fork of [Lawnchair](https://github.com/LawnchairLauncher/Lawnchair): an Android launcher without an app drawer.
 
-### Background
+## Background
 
 This branch grew out of a few concrete gaps found while using the launcher day to day:
 
 - **No way to choose which workspace page is "home."** The launcher always opened on page 0, and pressing Home always returned there, with no way to pin a different page as the actual home screen.
-- **No way to grow the workspace to the left.** Stock Launcher3 can only add a new page at the right edge (by dragging an icon past the last page). There was no equivalent action for the left edge.
+- **No way to grow the workspace to the left.** Stock Launcher3 can only add a new page at the right edge, by dragging an icon past the last page. There was no equivalent action for the left edge.
 
-### Current state
+## Current state
 
-#### Configurable home page
-Desktop settings expose a page picker ("Home screen") listing the current workspace pages. The selection is stored by the page's stable screen id rather than its position, so it survives page reordering. It is applied:
-- on a fresh launch of the launcher (not on rotation/configuration-change restores, and not in screenshot mode), and
-- on every Home button press, snapping directly to the chosen page in a single scroll instead of bouncing through page 0 first.
+### Configurable home page
+Desktop settings now include a **Home screen** picker that lists the current workspace pages. The selection is stored by the page's stable screen id rather than its position, so it survives page reordering. It is applied on a fresh launch of the launcher — but not on rotation or configuration-change restores, and not in screenshot mode — and on every Home button press: the launcher snaps directly to the chosen page in a single scroll instead of bouncing through page 0. If the saved page no longer exists (for example, it was removed), the launcher falls back to the first page instead of failing.
 
-If the saved page no longer exists (for example, it was removed), the launcher falls back to the first page instead of failing.
+### Add page to left
+Long-pressing empty desktop space now offers an **Add page to left** option next to Wallpaper, Widgets and Settings. It is available only while the desktop is unlocked, just like Widgets. The option inserts a new, empty page at the very left of the workspace and slides over to it. A newly added page follows the normal page lifecycle: it sticks once something is placed on it, and is reclaimed automatically if left empty, like any other unused page.
 
-#### Add page to the left
-Long-pressing empty desktop space now offers an "Add page to left" option alongside Wallpaper/Widgets/Settings, gated behind the same "lock desktop" setting as Widgets. It inserts a new, empty page at the very left of the workspace and slides over to it, mirroring the existing right-edge growth behavior. A newly added empty page follows the normal page lifecycle: it sticks once something is dropped on it, and is otherwise reclaimed automatically like any other unused page.
+## License
+Lawndesk is distributed under the [GPLv3 license](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
-#### Release build & signing
-The project builds and ships as a signed **release** build:
-- Release signing is wired through `build.gradle`, reading keystore and key credentials from environment variables rather than checking signing material into the source tree.
-- Continuous integration produces the signed release APK as a build artifact.
-
-### License
-Lawndesk is distributed under the [*GPLv3* license](https://www.gnu.org/licenses/gpl-3.0.en.html).
-
-### Credit
+## Credit
 [Lawnchair Launcher](https://github.com/LawnchairLauncher/Lawnchair)
