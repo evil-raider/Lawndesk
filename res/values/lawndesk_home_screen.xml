@@ -3,4 +3,7 @@
     <!-- Lawndesk: choose which workspace page is the home page -->
     <string name="home_screen_title">Home screen page</string>
     <string name="home_screen_page_format">Page %1$d</string>
+
+    <!-- Lawndesk: desktop long-press option to create a new page to the left -->
+    <string name="lawndesk_add_page_left">Add page to left</string>
 </resources>

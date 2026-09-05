@@ -54,6 +54,34 @@ public class LawndeskWorkspace extends Workspace {
     }
 
     /**
+     * Lawndesk: create a brand new, empty workspace page at the very left (index 0) and slide over
+     * to it. The stock launcher can only grow pages at the right edge (drag an icon past the last
+     * page); this exposes the mirror-image action as an explicit desktop long-press option.
+     *
+     * <p>The new page follows the same lifecycle as any other page: drop at least one item on it
+     * and it sticks across relaunches; leave it empty and the launcher reclaims it on the next
+     * {@link #stripEmptyScreens()} pass (same as an unused right-edge page).
+     */
+    public void addEmptyPageToLeft() {
+        if (mLauncher.isWorkspaceLoading()) {
+            // Adding screens while the model is loading is unsafe and can corrupt the DB.
+            return;
+        }
+        // Generate a fresh, unique screen id from the same source the stock right-edge commit uses.
+        long newId = LauncherSettings.Settings.call(getContext().getContentResolver(),
+                LauncherSettings.Settings.METHOD_NEW_SCREEN_ID)
+                .getLong(LauncherSettings.Settings.EXTRA_VALUE);
+        // Insert the page at the very front (index 0 == leftmost page in LTR).
+        insertNewWorkspaceScreen(newId, 0);
+        // Persist the new order so the page is remembered once it has content.
+        LauncherModel.updateWorkspaceScreenOrder(mLauncher, getScreenOrder());
+        // Front-insertion shifts every existing page right by one. Pin the currently visible page
+        // first (avoids a visual jump), then animate across to the freshly created page.
+        setCurrentPage(getNextPage() + 1);
+        snapToPage(0);
+    }
+
+    /**
      * Resolves the page index configured as the home page. The preference stores the screen id (as
      * a string); if it is missing, malformed, or no longer exists we fall back to the first page.
      */

@@ -32,10 +32,12 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.Toast;
 
+import com.android.launcher3.LawndeskWorkspace;
 import com.android.launcher3.Launcher;
 import com.android.launcher3.LauncherState;
 import com.android.launcher3.R;
 import com.android.launcher3.Utilities;
+import com.android.launcher3.Workspace;
 import com.android.launcher3.popup.ArrowPopup;
 import com.android.launcher3.shortcuts.DeepShortcutView;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Action;
@@ -152,6 +154,10 @@ public class OptionsPopupView extends ArrowPopup
         }
         options.add(new OptionItem(R.string.button_overview_mode, R.drawable.ic_pages, -1,
                 OptionsPopupView::startOrganizer));
+        if (!Utilities.getLawnchairPrefs(launcher).getLockDesktop()) {
+            options.add(new OptionItem(R.string.lawndesk_add_page_left, R.drawable.ic_pages, -1,
+                    OptionsPopupView::addPageLeft));
+        }
         options.add(new OptionItem(R.string.settings_button_text, R.drawable.ic_setting,
                 ControlType.SETTINGS_BUTTON, OptionsPopupView::startSettings));
 
@@ -183,6 +189,18 @@ public class OptionsPopupView extends ArrowPopup
     public static boolean startOrganizer(View view) {
         Launcher launcher = Launcher.getLauncher(view.getContext());
         launcher.getStateManager().goToState(LauncherState.OPTIONS, true);
+        return true;
+    }
+
+    /**
+     * Lawndesk: create a new, empty workspace page at the left edge and slide over to it.
+     */
+    public static boolean addPageLeft(View view) {
+        Launcher launcher = Launcher.getLauncher(view.getContext());
+        Workspace workspace = launcher.getWorkspace();
+        if (workspace instanceof LawndeskWorkspace) {
+            ((LawndeskWorkspace) workspace).addEmptyPageToLeft();
+        }
         return true;
     }
 
