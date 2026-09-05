@@ -2,15 +2,12 @@
 
 Lawndesk — Android-лаунчер без app drawer, сделанный на базе [Lawnchair Launcher](https://github.com/LawnchairLauncher/Lawnchair).
 
-[Download](https://github.com/renzhn/Lawndesk/releases)
-
 ## Предыстория
 
 Эта ветка появилась из-за нескольких конкретных проблем, вскрывшихся в повседневном использовании:
 
 - **Нельзя было выбрать, какая страница рабочего стола — «домашняя».** Лаунчер всегда открывался на странице 0, и нажатие Home всегда возвращало туда же — закрепить другую страницу как настоящий домашний экран было нельзя.
 - **Нельзя было расширить рабочий стол влево.** Стоковый Launcher3 умеет добавлять новую страницу только с правого края (перетаскиванием иконки за последнюю страницу). Аналогичного действия для левого края не существовало.
-- **Дебаг-диагностика утекала в обычное использование.** Дебаг-уведомление срабатывало на каждое событие пакетного менеджера (установка/обновление/удаление приложения), показывая внутренние детали («Lawndesk Debug: PackageUpdatedTask, op: 2, packages: [...]»), которые обычному пользователю видеть не надо. Как оказалось, это симптом того, что приложение собиралось и распространялось как **debug**-сборка, а не как подписанная **release**-сборка — debug-сборки тащат за собой дополнительное логирование/инструментацию под `BuildConfig.DEBUG` и, соответственно, тяжелее и медленнее релизной.
 
 ## Current state
 
@@ -25,10 +22,9 @@ If the saved page no longer exists (for example, it was removed), the launcher f
 Long-pressing empty desktop space now offers an "Add page to left" option alongside Wallpaper/Widgets/Settings, gated behind the same "lock desktop" setting as Widgets. It inserts a new, empty page at the very left of the workspace and slides over to it, mirroring the existing right-edge growth behavior. A newly added empty page follows the normal page lifecycle: it sticks once something is dropped on it, and is otherwise reclaimed automatically like any other unused page.
 
 ### Release build & signing
-The project now builds and ships as a signed **release** build rather than a debug build:
+The project builds and ships as a signed **release** build:
 - Release signing is wired through `build.gradle`, reading keystore and key credentials from environment variables rather than checking signing material into the source tree.
 - Continuous integration produces the signed release APK as a build artifact.
-- Because `BuildConfig.DEBUG` is `false` in a release build, the debug package-update notifications described above no longer appear — building the correct variant was the fix, no additional code changes were needed for that specifically.
 
 ## License
 Lawndesk is distributed under the [*GPLv3* license](https://www.gnu.org/licenses/gpl-3.0.en.html).
