@@ -1,16 +1,16 @@
 # Lawndesk
 
-Lawndesk is an Android launcher without app drawer, based on [Lawnchair Launcher](https://github.com/LawnchairLauncher/Lawnchair).
+Lawndesk — Android-лаунчер без app drawer, сделанный на базе [Lawnchair Launcher](https://github.com/LawnchairLauncher/Lawnchair).
 
 [Download](https://github.com/renzhn/Lawndesk/releases)
 
-## Background
+## Предыстория
 
-This branch grew out of a few concrete gaps found while using the launcher day to day:
+Эта ветка появилась из-за нескольких конкретных проблем, вскрывшихся в повседневном использовании:
 
-- **No way to choose which workspace page is "home."** The launcher always opened on page 0, and pressing Home always returned there, with no way to pin a different page as the actual home screen.
-- **No way to grow the workspace to the left.** Stock Launcher3 can only add a new page at the right edge (by dragging an icon past the last page). There was no equivalent action for the left edge.
-- **Debug-only diagnostics were leaking into normal use.** A debug notification fired on every package-manager event (app installed/updated/removed), surfacing internal details ("Lawndesk Debug: PackageUpdatedTask, op: 2, packages: [...]") that a real user has no reason to see. This turned out to be a symptom of the app being built and distributed as a **debug** build instead of a signed **release** build — debug builds carry extra logging/instrumentation gated behind `BuildConfig.DEBUG`, and are correspondingly heavier and slower than a release build.
+- **Нельзя было выбрать, какая страница рабочего стола — «домашняя».** Лаунчер всегда открывался на странице 0, и нажатие Home всегда возвращало туда же — закрепить другую страницу как настоящий домашний экран было нельзя.
+- **Нельзя было расширить рабочий стол влево.** Стоковый Launcher3 умеет добавлять новую страницу только с правого края (перетаскиванием иконки за последнюю страницу). Аналогичного действия для левого края не существовало.
+- **Дебаг-диагностика утекала в обычное использование.** Дебаг-уведомление срабатывало на каждое событие пакетного менеджера (установка/обновление/удаление приложения), показывая внутренние детали («Lawndesk Debug: PackageUpdatedTask, op: 2, packages: [...]»), которые обычному пользователю видеть не надо. Как оказалось, это симптом того, что приложение собиралось и распространялось как **debug**-сборка, а не как подписанная **release**-сборка — debug-сборки тащат за собой дополнительное логирование/инструментацию под `BuildConfig.DEBUG` и, соответственно, тяжелее и медленнее релизной.
 
 ## Current state
 
