@@ -5,6 +5,9 @@ on:
     branches: [feature/custom-default-page, master]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -56,3 +59,26 @@ jobs:
           name: lawndesk-release-apk
           path: build/outputs/apk/**/*.apk
           if-no-files-found: warn
+
+      - name: Publish GitHub Release
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          APK="$(find build/outputs/apk -path '*release*' -name '*.apk' | head -n1)"
+          [ -n "$APK" ] || { echo "Release APK not found"; exit 1; }
+          VERSION="$(sed -nE 's/^[[:space:]]*versionName[[:space:]]+"([^"]+)".*/\1/p' build.gradle | head -n1)"
+          [ -n "$VERSION" ] || VERSION="1.0"
+          TAG="v${VERSION}.${GITHUB_RUN_NUMBER}"
+          OUT_APK="Lawndesk-${TAG}.apk"
+          cp "$APK" "$OUT_APK"
+          PRE=""
+          if [ "${GITHUB_REF_NAME}" != "master" ]; then PRE="--prerelease"; fi
+          gh release create "$TAG" "$OUT_APK" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Lawndesk $TAG (${GITHUB_REF_NAME})" \
+            --notes "Built by GitHub Actions: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
+            --generate-notes $PRE
+          echo "Published release $TAG with $OUT_APK"
